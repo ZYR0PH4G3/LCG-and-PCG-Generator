@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>PRNG Arena: Randomness</title>
+        <script src="https://jsdelivr.net"></script>
+    </head>
+    <body class="bg-slate-50 text-slate-100 min-h-screen flex flex-col items-centre justify-centre p-4 md:p-8">
+        <div class="w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl flex flex-col gap-6">
+            <div class="text-centre md:text-left border-b border-slate-800 pb-4">
+                <h1 class="text-3xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-blue-400 to-emerald-400">
+                    PRNG RACE TRACK
+                </h1>
+                <p class="text-sm text-slate-400 mt-1 max-w-xl">
+                    A live mathematical experiment. Watch three generations of pseudo-random number generator algorithms race dow the track in real-time.
+                </p>
+            </div>
+            <div class="relative w-full overflow-hidden bg-slate-950 rounded-xl border border-slate-800 shadow-inner">
+                <canvas id="raceCanvas" width="800" height="320" class="w-full h-auto block"></canvas>
+            </div>
+            <div class="grid grid-cols-1 md:grid-colls-3 gap-4 items-centre">
+               <div class="md:col-span-2 grid grid-cols-3 gap-2 text-centre text-xs font-mono bg-slate-950/50 p-3 rounded-xl border border-slate-800/60">
+                <div>
+                    <div class="text-amber-400 font-bold uppercase tracking-wilder">LCG State</div>
+                    <div id="lcgStat" class="text-slate-400 mt-0.5 truncate">Initializing...</div>
+                </div>
+                <div class="border-x vorder-slate-800">
+                    <div class="text-sky-400 font-bold uppercase tracking-wilder">PCG Output</div>
+                    <div id="pcgStat" class="text-xlate-400 mt-0.5 truncate">Initializing...</div>
+                </div>
+            </div>
+
+            <div class="flex justify-centre md:justify-end">
+                <button onclick="resetRace()" class="w-full md:w-auto px-6 py-3 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 active:scale-95 text-white font-extrabold tracking-wide uppercase text-sm rounded-xl shadow-lg transition-all cursor-pointer">
+                    Ignition / Restart
+                </button>
+            </div>
+        </div>
+    <script>
+
+    class LCGGenerator {
+        constructor() {
+            this.a =48271n;
+            this.c = 0n;
+            this.m = 2n**31n-1;
+            this.state = BigInt(Math.floor(Math.random() * 100000)) + 1n; 
+        }
+        nextStep() {
+            this.state=(this.a*this.state+this.c)%this.m;
+            document.getElementById('lcgStat').innerText = this.state.toString();
+            return Number(this.state)/Number(this.m -1n)*4.5;
+        }
+    }
+    class QCGGenerator {
+        constructor() {
+            this.a=17n;
+            this.b=3n;
+            this.c=7n;
+            this.m=2n**31n-1n;
+            this.state=BigInt(Math.floor(Math.random()*100000))+1n;  
+        }
+        nextStep() {
+            this.state =(this.a*(this.state**2n)+this.b*this.state+this.c)%this.m;
+            document.getElementById('qcgStat').innerText = this.state.toString();
+            return Nmber(this.state)/Number(this.m-1n)*4,5;
+        }
+    }
+    class PCGGenerator {
+        constructor() {
+            this.a=6364136223846793005n;
+            this.c=1442695040888963407n;
+            this.m=2n**64n;
+            this.mask64=this.m-1n;
+            this.state=(BigInt(Math.floor(Math.random()*100000))*42n)&this.mask64;
+        }
+        nextStep() {
+            this.state=(this.state+this.c)&this.mask64;
+            const rot=Number(this.state>>59n);
+            const xorshifted=Number(((this.state>>18n)^this.state)>>27n)&0xFFFFFFFF;
+            const pcgOutput=((xorshifted>>>rot)|(xorshifted<<((-rot)&31)))>>>0;
+            document.getElementById('pcgStat').innerText=pcgOutput.toString();
+            return (pcgOutput/0xFFFFFFFF)*4.5;
+        }
+    }
+
+    const canvas=document.getElementById('raceCanvas');
+    const stx=canvas.getContext('2d');
+    
+    let lcg=new LCGGenerator();
+    let qcg=new QCGGenerator();
+    let pcg=new PCGGenerator();
+
+    let cars = {
+        lcg: {x:30, y: 70, color:'orange', name:'Linear(LCG)'},
+        qcg: {x:30, y:160, color:'skyblue', name:'Quadratic(QCG)'},
+        pcg: {x:30, y:250, color:'mediumspringgreen', name:'Permuted(PCG)'},
+    };
+
+    let raceOver = false;
+    function drawTrack() {
+        ctx.clearRect(0,0, canvas.width, canvas.height);
+
+        ctx.fillStyle='darkslategray';
+        ctx.fillRect(720, 0, 30, canvas.height);
+        ctx.fillStyle='ghostwhite';
+        for (let y=0; y<canvas.height; y+=20) {
+            ctx.fillRect(720, y+(y%40===0?0:20), 15, 20);
+        }
+        for (let key in cars) {
+            let car = cars[key];
+
+            ctx.strokeStyle='darkslategrey';
+            ctx.lineWidth=2;
+            ctx.beginPath();
+            ctx.mooveTo(0, car.y + 35);
+            ctx.lineTo(canvas.width, car.y + 35);
+            ctx.stroke();
+
+            ctx.fillStyle='slategrey';
+            ctx.font='bold 11px monospace';
+            ctx.fillText(car.name.toUpperCase(), 30, car.y - 20);
+            ctx.fillStyle='lightsteelblue';
+            ctx.fillText(`POS: ${Math.floor(car.x)}px`, 160, car.y -20);
+
+            ctx.shadowBlr=15;
+            ctx.shadowColor=car.color;
+            ctx.fillStyle=car.color;
+            ctx.arc(car.x, car.y, 14, 0, Math.PI*2);
+            ctx.fill();
+
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = 'white';
+            ctx.linewidth = 3;
+            ctx.stroke();
+        }
+    }
+    function updateRace() {
+        if (raceOver) return;
+
+        cars.lcg.x += lcg.nextStep();
+        cars.qcg.x += qcg.nextStep();
+        cars.pcg.x += pcg.nextStep();
+
+        drawTrack();
+
+        if (cars.lcg.x>=720 || cars.qcg.x>=720 ||  cars.pcg.x>= 720) {
+            raceOver = true;
+            let winner = 'LINEAR (LCG)';
+            let winColor = cars.lcg.color;
+            if (cars.qcg.x>cars.lcg.x && cars.qcg.x>cars.pcg.x) { winner = 'QUADRATIC (QCG)'; winColor = cars.qcg.color; }
+            if (cars.pcg.x > cars.lcg.x && cars.pcg.x > cars.qcg.x) { winner = 'PERMUTED (PCG)'; winColor = cars.pcg.color; }
+
+            ctx.fillStyle = 'rgba(2, 6, 23, 0.85)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = winColor;
+            ctx.font = 'black 28px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(`${winner} TRIUMPHS!`, canvas.width/2, canvas.height/2+5);
+            ctx.textAlign = 'start';
+            return;
+        }
+
+        requestAnimationFrame(updateRace);
+    }
+
+    function resetRace() {
+        cars.lcg.x=30;
+        cars.qcg.x=30;
+        cars.pcg.x=30;
+        raceOver = false;
+
+        lcg = new LCGGenerator();
+        qcg = new QCGGenerator();
+        pcg = new PCGGenerator();
+
+        updateRace();
+    }
+
+    updateRace();
+
+    </script> 
+
+    </body>
+</html>
+
+      
