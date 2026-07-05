@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://7o2oq23gangb"]
+
+[node name="title_screen" type="Node2D" unique_id=5552714]
+
+[node name="background" type="TextureRect" parent="." unique_id=348789975]
+offset_right = 1152.0
+offset_bottom = 648.0
