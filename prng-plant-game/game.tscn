@@ -5,7 +5,9 @@ load_path = "res://.godot/imported/prng-plant-game.png-5be0934f8b13dc178b1f5bea1
 
 [node name="PRNG_plant_game" type="Node2D" unique_id=1957238678]
 
-[node name="Background" type="TextureRect" parent="." unique_id=415215927]
+[node name="Scrolling_Background" type="Parallax2D" parent="." unique_id=1047466066]
+
+[node name="Background" type="TextureRect" parent="Scrolling_Background" unique_id=415215927]
 offset_right = 1152.0
 offset_bottom = 648.0
 texture = SubResource("CompressedTexture2D_mwb40")
