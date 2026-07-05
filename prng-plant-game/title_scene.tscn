@@ -1,7 +1,60 @@
 [gd_scene format=3 uid="uid://7o2oq23gangb"]
 
+[ext_resource type="Script" uid="uid://c2e12ol8orb87" path="res://title_scene.gd" id="1_176dl"]
+[ext_resource type="Texture2D" uid="uid://c3gf8ovghg8q1" path="res://prng-plant-game.png" id="1_wkkv4"]
+
 [node name="title_screen" type="Node2D" unique_id=5552714]
+script = ExtResource("1_176dl")
 
 [node name="background" type="TextureRect" parent="." unique_id=348789975]
 offset_right = 1152.0
 offset_bottom = 648.0
+texture = ExtResource("1_wkkv4")
+expand_mode = 1
+
+[node name="Title" type="RichTextLabel" parent="." unique_id=1191894423]
+clip_contents = false
+offset_left = 272.0
+offset_top = 224.0
+offset_right = 888.0
+offset_bottom = 352.0
+theme_override_constants/outline_size = 40
+theme_override_font_sizes/normal_font_size = 108
+text = "Groww.io"
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+justification_flags = 160
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=690237440]
+offset_left = 448.0
+offset_top = 416.0
+offset_right = 688.0
+offset_bottom = 560.0
+
+[node name="Start" type="Button" parent="VBoxContainer" unique_id=932642956]
+layout_mode = 2
+theme_override_constants/outline_size = 14
+theme_override_font_sizes/font_size = 26
+text = "START GAME
+"
+
+[node name="Settings" type="Button" parent="VBoxContainer" unique_id=434916376]
+layout_mode = 2
+theme_override_constants/outline_size = 14
+theme_override_font_sizes/font_size = 26
+text = "SETTINGS
+
+"
+
+[node name="Quit" type="Button" parent="VBoxContainer" unique_id=314572369]
+layout_mode = 2
+theme_override_constants/outline_size = 14
+theme_override_font_sizes/font_size = 26
+text = "QUIT
+
+"
+
+[connection signal="pressed" from="VBoxContainer/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="VBoxContainer/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="VBoxContainer/Quit" to="." method="_on_quit_pressed"]
