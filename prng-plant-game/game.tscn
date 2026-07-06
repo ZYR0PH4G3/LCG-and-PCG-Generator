@@ -1,14 +1,69 @@
 [gd_scene format=3 uid="uid://bqqjbbuwckf7u"]
 
+[ext_resource type="Texture2D" uid="uid://bo7bty155286t" path="res://Ground.png" id="1_7jktm"]
+[ext_resource type="Script" uid="uid://cq7q0ibjsvad8" path="res://game.gd" id="1_ryrav"]
+[ext_resource type="Texture2D" uid="uid://dch62mm5k7n60" path="res://Pot.png" id="2_ryrav"]
+[ext_resource type="Texture2D" uid="uid://d1kug5gv2j430" path="res://Bud.png" id="3_eow3j"]
+[ext_resource type="Texture2D" uid="uid://dcgaiddbfxu0s" path="res://Water.png" id="4_j5wjh"]
+[ext_resource type="Texture2D" uid="uid://8f21hgbhekjc" path="res://Slime_Fertilizer.webp" id="5_vef74"]
+
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_mwb40"]
 load_path = "res://.godot/imported/prng-plant-game.png-5be0934f8b13dc178b1f5bea13a69352.ctex"
 
 [node name="PRNG_plant_game" type="Node2D" unique_id=1957238678]
+script = ExtResource("1_ryrav")
 
 [node name="Scrolling_Background" type="Parallax2D" parent="." unique_id=1047466066]
+repeat_size = Vector2(1, 648)
 
 [node name="Background" type="TextureRect" parent="Scrolling_Background" unique_id=415215927]
 offset_right = 1152.0
 offset_bottom = 648.0
 texture = SubResource("CompressedTexture2D_mwb40")
 expand_mode = 1
+
+[node name="Ground" type="TextureRect" parent="." unique_id=48296291]
+offset_top = 400.0
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("1_7jktm")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=177894780]
+position = Vector2(576, 324)
+
+[node name="Pot" type="TextureRect" parent="." unique_id=2128990282]
+offset_left = 504.0
+offset_top = 344.0
+offset_right = 664.0
+offset_bottom = 528.0
+texture = ExtResource("2_ryrav")
+expand_mode = 1
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=670280262]
+
+[node name="Water" type="TextureButton" parent="CanvasLayer" unique_id=1022397777]
+offset_left = 8.0
+offset_top = 400.0
+offset_right = 134.0
+offset_bottom = 552.0
+texture_normal = ExtResource("4_j5wjh")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Manure" type="TextureButton" parent="CanvasLayer" unique_id=636648694]
+offset_left = 144.0
+offset_top = 464.0
+offset_right = 240.0
+offset_bottom = 560.0
+texture_normal = ExtResource("5_vef74")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Bud" type="TextureRect" parent="." unique_id=1256857297]
+offset_left = 512.0
+offset_top = 248.0
+offset_right = 648.0
+offset_bottom = 384.0
+texture = ExtResource("3_eow3j")
+
+[node name="StemContainer" type="Node2D" parent="." unique_id=227131235]
