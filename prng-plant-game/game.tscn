@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://d1kug5gv2j430" path="res://Bud.png" id="3_eow3j"]
 [ext_resource type="Texture2D" uid="uid://dcgaiddbfxu0s" path="res://Water.png" id="4_j5wjh"]
 [ext_resource type="Texture2D" uid="uid://8f21hgbhekjc" path="res://Slime_Fertilizer.webp" id="5_vef74"]
+[ext_resource type="Texture2D" uid="uid://bmy40y0v730yk" path="res://Stem.png" id="7_eow3j"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_mwb40"]
 load_path = "res://.godot/imported/prng-plant-game.png-5be0934f8b13dc178b1f5bea13a69352.ctex"
@@ -60,10 +61,15 @@ ignore_texture_size = true
 stretch_mode = 0
 
 [node name="Bud" type="TextureRect" parent="." unique_id=1256857297]
-offset_left = 512.0
-offset_top = 248.0
-offset_right = 648.0
-offset_bottom = 384.0
+offset_left = 448.0
+offset_top = 192.0
+offset_right = 704.0
+offset_bottom = 448.0
 texture = ExtResource("3_eow3j")
 
-[node name="StemContainer" type="Node2D" parent="." unique_id=227131235]
+[node name="Stem" type="TextureRect" parent="." unique_id=2039276224]
+texture_repeat = 2
+offset_right = 64.0
+texture = ExtResource("7_eow3j")
+expand_mode = 1
+stretch_mode = 1
